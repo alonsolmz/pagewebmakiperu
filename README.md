@@ -40,10 +40,5 @@ MaquiPeru es una aplicación web moderna diseñada para la exhibición y gestió
 * Node.js (v18 o superior)
 * Cuenta en Supabase
 
-### 2. Instalación
-```bash
-# Clonar el repositorio
-git clone [https://github.com/tu-usuario/maquiperu.git](https://github.com/tu-usuario/maquiperu.git)
 
-# Instalar dependencias
-npm install
+
