@@ -1,46 +1,49 @@
-# Astro Starter Kit: Basics
+# 🏗️ MaquiPeru - Catálogo de Maquinaria Pesada
 
-```sh
-npm create astro@latest -- --template basics
-```
+MaquiPeru es una aplicación web moderna diseñada para la exhibición y gestión de maquinaria pesada. Combina una interfaz de usuario de alto impacto visual para clientes con un panel administrativo privado para el control de inventario en tiempo real.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+![Estado del Proyecto](https://img.shields.io/badge/Estado-En%20Desarrollo-yellow)
+![Astro](https://img.shields.io/badge/Framework-Astro-ff5d01)
+![Supabase](https://img.shields.io/badge/Database-Supabase-3ecf8e)
+![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind--CSS-38bdf8)
 
-## 🚀 Project Structure
+---
 
-Inside of your Astro project, you'll see the following folders and files:
+## 🚀 Características Principales
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+### 🌐 Vista Pública (Catálogo)
+* **Filtros Inteligentes:** Clasificación por categorías (Línea Amarilla, Volquetes, Minería) y rangos de precio específicos.
+* **Diseño Responsivo:** Optimizado para móviles y escritorio con una estética industrial premium.
+* **Conversión Directa:** Botones de cotización integrados directamente con WhatsApp para facilitar el contacto.
+* **Precios Dinámicos:** Visualización de precios en USD formateados automáticamente.
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+### 🔐 Gestión Interna (Panel de Control)
+* **Carga de Inventario:** Formulario para subir nuevos equipos, incluyendo imágenes y metadatos.
+* **Control de Visibilidad:** Sistema de "Ocultar/Mostrar" que permite retirar equipos del catálogo público sin eliminarlos de la base de datos.
+* **Almacenamiento en la Nube:** Integración con Supabase Storage para el manejo eficiente de fotografías de alta resolución.
+* **Seguridad de Datos:** Políticas RLS (Row Level Security) configuradas para la protección de la integridad de la base de datos.
 
-## 🧞 Commands
+---
 
-All commands are run from the root of the project, from a terminal:
+## 🛠️ Stack Tecnológico
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+* **Frontend:** [Astro](https://astro.build/) (Islands Architecture para máxima velocidad).
+* **Estilos:** [Tailwind CSS](https://tailwindcss.com/).
+* **Backend & DB:** [Supabase](https://supabase.com/) (PostgreSQL + Storage).
+* **Iconografía:** [Heroicons](https://heroicons.com/).
 
-## 👀 Want to learn more?
+---
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## ⚙️ Configuración del Proyecto
+
+### 1. Requisitos previos
+* Node.js (v18 o superior)
+* Cuenta en Supabase
+
+### 2. Instalación
+```bash
+# Clonar el repositorio
+git clone [https://github.com/tu-usuario/maquiperu.git](https://github.com/tu-usuario/maquiperu.git)
+
+# Instalar dependencias
+npm install
