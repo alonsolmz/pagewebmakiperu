@@ -5,7 +5,7 @@ import '../styles/global.css';
 import { Image } from 'astro:assets';
 import heroImg from '../assets/maquinariaimagen.png'; 
 
-// Filtramos por 'visible', true para que solo aparezcan los activos
+
 const { data: vehiculos, error } = await supabase
   .from('vehiculos')
   .select('*')
@@ -63,7 +63,7 @@ if (error) console.error(error);
         </h2>
         <div class="text-[#4A4F5A] text-xl italic font-medium leading-relaxed space-y-6">
           <p>
-            En <strong class="text-[#0B132B]">MaquiPeru</strong>, no solo vendemos maquinaria; construimos los cimientos del progreso industrial en el país.
+            En <strong class="text-[#0B132B]">MaquiPeru</strong>, seleccionamos rigurosamente cada unidad de nuestro catálogo para garantizar potencia, durabilidad y el mejor retorno de inversión. Desde excavadoras de gran alcance hasta equipos especializados para minería, ofrecemos soluciones que transforman desafíos en realidades, respaldados por una atención enfocada en la excelencia y la confianza a largo plazo.
           </p>
         </div>
       </div>
