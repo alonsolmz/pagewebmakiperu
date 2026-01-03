@@ -1,47 +1,109 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { supabase } from '../lib/supabase';
 import '../styles/global.css';
+
+// 1. Obtenemos los vehículos (incluyendo el estado de visibilidad)
+const { data: vehiculos, error } = await supabase
+  .from('vehiculos')
+  .select('*')
+  .order('created_at', { ascending: false });
+
+if (error) console.error("Error cargando inventario:", error);
 ---
 
-<Layout title="Gestión MaquiPeru">
-  <main class="min-h-screen bg-slate-50 p-6 font-sans">
-    <div class="max-w-2xl mx-auto bg-white shadow-xl rounded-xl p-8 border border-slate-200">
-      <h1 class="text-2xl font-bold text-slate-800 mb-6 border-b pb-4">Panel de Inventario - MaquiPeru</h1>
+<Layout title="Gestión Interna | MaquiPeru">
+  <main class="min-h-screen bg-[#F5F6F8] p-4 md:p-10 font-sans">
+    <div class="max-w-5xl mx-auto">
       
-      <form id="uploadForm" class="space-y-4">
+      <div class="bg-[#0B132B] rounded-3xl p-8 mb-10 shadow-2xl flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
-          <label class="block text-sm font-semibold text-slate-700">Nombre del Vehículo</label>
-          <input type="text" id="nombre" class="w-full p-2 border rounded-md" placeholder="Ej: Excavadora CAT 320D" required />
+          <h1 class="text-3xl font-black text-white uppercase tracking-tighter">Panel MaquiPeru</h1>
+          <p class="text-[#F2B705] text-sm font-bold italic">Control de Inventario</p>
         </div>
+        <a href="/" class="bg-white/10 text-white px-6 py-2 rounded-full text-xs font-bold border border-white/20 hover:bg-[#F2B705] hover:text-[#0B132B] transition-all uppercase">
+          Ver Sitio Web
+        </a>
+      </div>
 
-        <div>
-          <label class="block text-sm font-semibold text-slate-700">Categoría</label>
-          <select id="categoria" class="w-full p-2 border rounded-md">
-            <option value="Linea Amarilla">Línea Amarilla</option>
-            <option value="Volquetes">Volquetes</option>
-            <option value="Mineria">Minería</option>
-          </select>
-        </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        
+        <section class="bg-white shadow-xl rounded-[32px] p-8 border border-gray-100 h-fit">
+          <h2 class="text-xl font-black text-[#0B132B] mb-8 uppercase italic flex items-center gap-2">
+            <span class="w-2 h-8 bg-[#F2B705]"></span> Añadir Equipo
+          </h2>
+          
+          <form id="uploadForm" class="space-y-5">
+            <div>
+              <label class="block text-[10px] font-black text-[#0B132B] uppercase tracking-[0.2em] mb-2">Nombre del Equipo</label>
+              <input type="text" id="nombre" class="w-full p-4 bg-gray-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-[#F2B705] outline-none" placeholder="Ej: Excavadora CAT 320D" required />
+            </div>
 
-        <div>
-          <label class="block text-sm font-semibold text-slate-700">Precio (USD)</label>
-          <input type="number" id="precio" class="w-full p-2 border rounded-md" placeholder="Dejar vacío para 'Consultar'" />
-        </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[10px] font-black text-[#0B132B] uppercase tracking-[0.2em] mb-2">Categoría</label>
+                <select id="categoria" class="w-full p-4 bg-gray-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-[#F2B705] outline-none cursor-pointer">
+                  <option value="Linea Amarilla">Línea Amarilla</option>
+                  <option value="Volquetes">Volquetes</option>
+                  <option value="Mineria">Minería</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-black text-[#0B132B] uppercase tracking-[0.2em] mb-2">Precio (USD) *</label>
+                <input type="number" id="precio" class="w-full p-4 bg-gray-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-[#F2B705] outline-none" placeholder="Ej: 85000" required />
+              </div>
+            </div>
 
-        <div>
-          <label class="block text-sm font-semibold text-slate-700">Especificaciones</label>
-          <textarea id="especificaciones" rows="3" class="w-full p-2 border rounded-md" placeholder="Motor, HP, Horas de uso..."></textarea>
-        </div>
+            <div>
+              <label class="block text-[10px] font-black text-[#0B132B] uppercase tracking-[0.2em] mb-2">Imagen</label>
+              <input type="file" id="foto" accept="image/*" class="w-full text-xs text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-2xl file:border-0 file:bg-[#0B132B] file:text-white file:font-black cursor-pointer" required />
+            </div>
 
-        <div>
-          <label class="block text-sm font-semibold text-slate-700">Foto del Vehículo</label>
-          <input type="file" id="foto" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-yellow-50 file:text-yellow-700" required />
-        </div>
+            <button type="submit" id="btnSubmit" class="w-full bg-[#F2B705] text-[#0B132B] font-black py-5 rounded-2xl uppercase tracking-widest hover:bg-[#0B132B] hover:text-white transition-all shadow-xl shadow-[#F2B705]/20 mt-4">
+              Publicar Ahora
+            </button>
+          </form>
+        </section>
 
-        <button type="submit" id="btnSubmit" class="w-full bg-slate-900 text-white font-bold py-3 rounded-md hover:bg-yellow-500 hover:text-slate-900 transition-all">
-          Publicar en la Web
-        </button>
-      </form>
+        <section class="bg-white shadow-xl rounded-[32px] p-8 border border-gray-100">
+          <h2 class="text-xl font-black text-[#0B132B] mb-8 uppercase italic flex items-center gap-2">
+             <span class="w-2 h-8 bg-[#0B132B]"></span> Control de Catálogo
+          </h2>
+          
+          <div class="space-y-4 max-h-[500px] overflow-y-auto pr-2 no-scrollbar" id="inventory-list">
+            {vehiculos?.map((v) => (
+              <div class={`flex items-center gap-4 p-4 rounded-2xl border transition-all ${v.visible ? 'bg-gray-50 border-gray-100' : 'bg-gray-200 border-dashed border-gray-400 opacity-60'}`}>
+                <img src={v.imagen_url} class="w-20 h-20 object-cover rounded-xl shadow-sm" alt={v.nombre} />
+                <div class="flex-1">
+                  <h3 class="font-black text-[#0B132B] text-sm uppercase leading-tight">{v.nombre}</h3>
+                  <p class="text-[9px] font-bold uppercase tracking-widest mt-1">
+                    Estado: <span class={v.visible ? 'text-green-600' : 'text-red-600'}>{v.visible ? '● VISIBLE' : '○ OCULTO'}</span>
+                  </p>
+                </div>
+                <button 
+                  class="btn-toggle-visible p-3 rounded-xl hover:bg-white transition-all shadow-sm"
+                  data-id={v.id}
+                  data-current={v.visible.toString()}
+                  data-name={v.nombre}
+                >
+                  {v.visible ? (
+                    /* Icono Ojo Tachado */
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                    </svg>
+                  ) : (
+                    /* Icono Ojo */
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#F2B705]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   </main>
 </Layout>
@@ -49,27 +111,29 @@ import '../styles/global.css';
 <script>
   import { supabase } from '../lib/supabase';
 
-  const form = document.getElementById('uploadForm');
+  // Lógica para Añadir
+  const form = document.getElementById('uploadForm') as HTMLFormElement;
   const btn = document.getElementById('btnSubmit');
 
-  form.addEventListener('submit', async (e) => {
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    btn.disabled = true;
-    btn.innerText = "Subiendo datos...";
+    if(!btn) return;
+    btn.setAttribute('disabled', 'true');
+    btn.innerText = "SUBIENDO...";
 
-    const file = document.getElementById('foto').files[0];
-    const nombre = document.getElementById('nombre').value;
-    const categoria = document.getElementById('categoria').value;
-    const precio = document.getElementById('precio').value;
-    const especificaciones = document.getElementById('especificaciones').value;
+    const fotoInput = document.getElementById('foto') as HTMLInputElement;
+    const file = fotoInput.files?.[0];
+    const nombre = (document.getElementById('nombre') as HTMLInputElement).value;
+    const categoria = (document.getElementById('categoria') as HTMLSelectElement).value;
+    const precio = (document.getElementById('precio') as HTMLInputElement).value;
+
+    if (!file) return;
 
     try {
-      // 1. Subir imagen a Supabase Storage
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
+      const fileName = `${Date.now()}.${file.name.split('.').pop()}`;
       const filePath = `vehiculos/${fileName}`;
 
-      const { data: storageData, error: storageError } = await supabase.storage
+      const { error: storageError } = await supabase.storage
         .from('fotos-maquinaria')
         .upload(filePath, file);
 
@@ -77,26 +141,44 @@ import '../styles/global.css';
 
       const { data: { publicUrl } } = supabase.storage.from('fotos-maquinaria').getPublicUrl(filePath);
 
-      // 2. Insertar datos en la tabla 'vehiculos'
       const { error: dbError } = await supabase.from('vehiculos').insert([
-        { 
-          nombre, 
-          categoria, 
-          precio: precio ? parseFloat(precio) : null, 
-          especificaciones, 
-          imagen_url: publicUrl 
-        }
+        { nombre, categoria, precio: parseFloat(precio), imagen_url: publicUrl, visible: true }
       ]);
 
       if (dbError) throw dbError;
-
-      alert("¡Vehículo publicado con éxito!");
-      form.reset();
-    } catch (err) {
-      alert("Hubo un problema: " + err.message);
+      location.reload();
+    } catch (err: any) {
+      alert("Error: " + err.message);
     } finally {
-      btn.disabled = false;
-      btn.innerText = "Publicar en la Web";
+      btn.removeAttribute('disabled');
+      btn.innerText = "Publicar Ahora";
+    }
+  });
+
+  // Lógica para Visibilidad (UPDATE)
+  document.addEventListener('click', async (e) => {
+    const toggleBtn = (e.target as HTMLElement).closest('.btn-toggle-visible') as HTMLButtonElement;
+    if (!toggleBtn) return;
+
+    const id = toggleBtn.dataset.id;
+    const isVisible = toggleBtn.dataset.current === 'true';
+    const name = toggleBtn.dataset.name;
+
+    const accion = isVisible ? "ocultar" : "mostrar";
+    if (!confirm(`¿Deseas ${accion} "${name}" del catálogo público?`)) return;
+
+    try {
+      toggleBtn.disabled = true;
+      const { error } = await supabase
+        .from('vehiculos')
+        .update({ visible: !isVisible })
+        .eq('id', id);
+
+      if (error) throw error;
+      location.reload();
+    } catch (err: any) {
+      alert("Error al actualizar: " + err.message);
+      toggleBtn.disabled = false;
     }
   });
 </script>
