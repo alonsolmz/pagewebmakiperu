@@ -1,62 +1,114 @@
 ---
 export const prerender = false;
-
-import Layout from '../layouts/Layout.astro'; // Ajusta la ruta si usas @
+import Layout from '../layouts/Layout.astro';
 import { supabase } from '../lib/supabase';
 import { Image } from 'astro:assets';
 
-// 1. Obtenemos TODOS los vehículos para la lista principal
 const { data: vehiculos, error } = await supabase
   .from('vehiculos')
   .select('*')
   .order('created_at', { ascending: false });
 
-// 2. Manejo de error amigable (SIN REDIRECT)
-const hayError = !!error;
 const listaVehiculos = vehiculos || [];
 ---
 
 <Layout title="MaquiPeru - Catálogo">
-  <main style="font-family: sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto;">
-    <header style="text-align: center; margin-bottom: 40px;">
-      <h1 style="font-size: 3rem; margin-bottom: 10px;">MAQUIPERU</h1>
-      <p style="color: #666;">Catálogo de Maquinaria Pesada</p>
+  <main class="container">
+    <header class="hero">
+      <h1>MAQUIPERU</h1>
+      <p>Catálogo de Maquinaria Pesada</p>
     </header>
 
-    {hayError && (
-      <div style="background: #fee2e2; color: #b91c1c; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-        <strong>Error de conexión:</strong> {error.message}. 
-        <br/>Revisa las variables de entorno en Vercel.
-      </div>
-    )}
-
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;">
+    <div class="grid">
       {listaVehiculos.map((v) => (
-        <a href={`/vehiculo/${v.id}`} style="text-decoration: none; color: inherit;">
-          <div style="border: 1px solid #eee; border-radius: 15px; overflow: hidden; background: white;">
-            <Image 
-              src={v.imagen_url} 
-              alt={v.nombre} 
-              width={400} 
-              height={250} 
-              style="width: 100%; height: 200px; object-fit: cover;"
-            />
-            <div style="padding: 20px;">
-              <span style="font-size: 0.7rem; font-weight: bold; color: #f59e0b; text-transform: uppercase;">
-                {v.categoria}
-              </span>
-              <h2 style="margin: 10px 0; font-size: 1.25rem;">{v.nombre}</h2>
-              <p style="font-weight: 900; font-size: 1.1rem; color: #111;">
-                {v.precio ? `$${Number(v.precio).toLocaleString()}` : "Consultar"}
-              </p>
-            </div>
+        <a href={`/vehiculo/${v.id}`} class="card">
+          <div class="image-container">
+            <Image src={v.imagen_url} alt={v.nombre} width={400} height={250} />
+            <span class="badge">{v.categoria}</span>
+          </div>
+          <div class="content">
+            <h2 class="title">{v.nombre}</h2>
+            <p class="price">{v.precio ? `$${Number(v.precio).toLocaleString()}` : "Consultar"}</p>
           </div>
         </a>
       ))}
     </div>
-
-    {!hayError && listaVehiculos.length === 0 && (
-      <p style="text-align: center; color: #999;">No hay vehículos registrados.</p>
-    )}
   </main>
 </Layout>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .hero {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  .hero h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: -2px;
+  }
+  .hero p {
+    color: #64748b;
+    font-size: 1.2rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+  }
+  .card {
+    text-decoration: none;
+    color: inherit;
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #f1f5f9;
+  }
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  }
+  .image-container {
+    position: relative;
+    height: 220px;
+  }
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(15, 23, 42, 0.9);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .content {
+    padding: 24px;
+  }
+  .title {
+    margin: 0 0 10px 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+  }
+  .price {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0;
+  }
+</style>

@@ -1,6 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 :root {
   --azul-principal: #0B132B;
@@ -19,4 +16,9 @@ body {
 .vehiculo-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px rgba(11, 19, 43, 0.12);
+}
+
+:root {
+  --azul-principal: #0B132B;
+  --amarillo-acento: #F2B705;
 }
