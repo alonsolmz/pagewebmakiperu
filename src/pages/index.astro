@@ -1,172 +1,84 @@
 ---
+export const prerender = false;
+
 import Layout from '../layouts/Layout.astro';
 import { supabase } from '../lib/supabase';
-import '../styles/global.css';
 import { Image } from 'astro:assets';
-import heroImg from '../assets/maquinariaimagen.png'; 
 
+const { id } = Astro.params;
 
-const { data: vehiculos, error } = await supabase
+const { data: vehiculo, error } = await supabase
   .from('vehiculos')
   .select('*')
-  .eq('visible', true)
-  .order('created_at', { ascending: false });
+  .eq('id', id)
+  .single();
 
-if (error) console.error(error);
+if (error || !vehiculo) {
+  return Astro.redirect('/');
+}
+
+const telefonoEmpresa = "51968348172";
+const mensajeWa = `Hola MaquiPeru, solicito información técnica detallada de: ${vehiculo.nombre}`;
+const urlWhatsapp = `https://wa.me/${telefonoEmpresa}?text=${encodeURIComponent(mensajeWa)}`;
 ---
 
-<Layout title="MaquiPeru | Maquinaria Pesada">
-  <div class="bg-[#F5F6F8] min-h-screen py-10 md:py-16 px-8 md:px-24 lg:px-40">
-    
-    <header class="bg-[#0B132B] w-full py-6 px-10 shadow-xl mb-12" style="border-radius: 24px;">
-      <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <a href="/" class="text-3xl font-black text-white tracking-tighter">
-          MAQUI<span class="text-[#F2B705]">PERU</span>
-        </a>
-
-        <nav class="hidden md:flex items-center gap-12">
-          <a href="/" class="text-[11px] font-black text-white/90 hover:text-[#F2B705] transition-colors uppercase tracking-[0.25em]">Inicio</a>
-          <a href="#nosotros" class="text-[11px] font-black text-white/90 hover:text-[#F2B705] transition-colors uppercase tracking-[0.25em]">Nosotros</a>
-          <a href="#grid-vehiculos" class="text-[11px] font-black text-white/90 hover:text-[#F2B705] transition-colors uppercase tracking-[0.25em]">Catálogo</a>
-        </nav>
-
-        <a href="https://wa.me/51968348172" 
-           class="bg-[#F2B705] text-[#0B132B] px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-[0.25em] hover:scale-105 transition-all shadow-lg">
-          CONTACTAR
-        </a>
-      </div>
-    </header>
-
-    <div class="relative overflow-hidden shadow-2xl bg-[#0B132B]" style="border-radius: 32px;">
-      <section class="relative h-[450px] md:h-[550px]">
-        <Image src={heroImg} alt="MaquiPeru" class="absolute inset-0 w-full h-full object-cover opacity-50" />
-        <div class="absolute inset-0 bg-gradient-to-r from-[#0B132B] via-transparent flex items-center px-10 md:px-20">
-          <div class="max-w-2xl">
-            <h1 class="text-6xl md:text-8xl font-black text-white italic tracking-tighter leading-[0.85] uppercase">
-              POTENCIA Y <br/> <span class="text-[#F2B705]">MOVIMIENTO</span>
-            </h1>
-            <p class="text-xl md:text-2xl text-white/80 font-light italic border-l-4 border-[#F2B705] pl-6 mt-6">
-              Soluciones de ingeniería para los proyectos más exigentes.
+<Layout title={`${vehiculo.nombre} - MaquiPeru`}>
+  <main class="bg-white min-h-screen">
+    <nav class="max-w-7xl mx-auto px-4 md:px-6 py-4">
+      <a href="/" class="text-xs md:text-sm font-bold text-slate-500 hover:text-yellow-600 transition-colors flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        VOLVER AL CATÁLOGO
+      </a>
+    </nav>
+    <div class="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 py-4 md:py-8">
+      <section>
+        <div class="lg:sticky lg:top-28">
+          <Image 
+            src={vehiculo.imagen_url} 
+            alt={vehiculo.nombre} 
+            width={800}
+            height={600}
+            format="webp"
+            class="w-full aspect-video lg:aspect-[4/3] object-cover rounded-2xl md:rounded-3xl shadow-2xl border border-gray-100"
+          />
+        </div>
+      </section>
+      <section class="flex flex-col">
+        <div class="mb-6">
+          <span class="inline-block bg-yellow-100 text-yellow-800 text-[10px] md:text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">
+            {vehiculo.categoria}
+          </span>
+          <h1 class="text-3xl md:text-5xl font-black text-slate-900 mt-4 leading-tight">
+            {vehiculo.nombre}
+          </h1>
+        </div>
+        <div class="bg-slate-900 text-white p-6 md:p-8 rounded-2xl md:rounded-3xl mb-8 flex justify-between items-center shadow-xl shadow-slate-200">
+          <div>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Precio de Venta</p>
+            <p class="text-3xl md:text-4xl font-black">
+              {vehiculo.precio ? `$${Number(vehiculo.precio).toLocaleString()}` : "Consultar"}
             </p>
           </div>
         </div>
+        <div class="space-y-6">
+          <h3 class="text-lg md:text-xl font-bold text-slate-800 border-b pb-2">Especificaciones Técnicas</h3>
+          <div class="grid grid-cols-1 gap-3 md:gap-4">
+            {vehiculo.especificaciones?.split('\n').map((item: string) => (
+              item.trim() !== "" && (
+                <div class="flex items-center gap-3 bg-gray-50 p-4 rounded-xl border border-gray-100 transition-hover hover:bg-white hover:shadow-sm">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full flex-shrink-0"></div>
+                  <span class="text-slate-700 font-medium text-sm md:text-base">{item}</span>
+                </div>
+              )
+            ))}
+          </div>
+        </div>
+        <div class="mt-10 md:mt-12 space-y-4">
+          <a href={urlWhatsapp} target="_blank" class="flex items-center justify-center gap-3 w-full bg-[#25D366] text-white py-4 md:py-5 rounded-2xl font-black text-lg md:text-xl hover:bg-green-600 hover:scale-[1.01] transition-all shadow-lg shadow-green-100">
+            SOLICITAR COTIZACIÓN
+          </a>
+        </div>
       </section>
     </div>
-
-    <div class="h-20 md:h-28"></div>
-
-    <section id="nosotros" class="bg-white py-24 px-10 rounded-[32px] shadow-sm border border-gray-100">
-      <div class="max-w-5xl mx-auto text-center">
-        <h2 class="text-2xl font-black text-[#0B132B] mb-8 uppercase tracking-[0.5em] flex flex-col items-center">
-          NOSOTROS
-          <div class="w-24 h-1 bg-[#F2B705] mt-4"></div>
-        </h2>
-        <div class="text-[#4A4F5A] text-xl italic font-medium leading-relaxed space-y-6">
-          <p>
-            En <strong class="text-[#0B132B]">MaquiPeru</strong>, seleccionamos rigurosamente cada unidad de nuestro catálogo para garantizar potencia, durabilidad y el mejor retorno de inversión. Desde excavadoras de gran alcance hasta equipos especializados para minería, ofrecemos soluciones que transforman desafíos en realidades, respaldados por una atención enfocada en la excelencia y la confianza a largo plazo.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <div class="h-20 md:h-28"></div>
-
-    <section id="grid-vehiculos" class="space-y-12">
-      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-        <div class="flex gap-3 overflow-x-auto w-full md:w-auto pb-2 no-scrollbar" id="category-filters">
-          <button class="filter-btn active bg-[#0B132B] text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all" data-category="Todos">Todos</button>
-          <button class="filter-btn bg-white text-gray-400 px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#F2B705] hover:text-[#0B132B] transition-all border border-gray-100" data-category="Linea Amarilla">Línea Amarilla</button>
-          <button class="filter-btn bg-white text-gray-400 px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#F2B705] hover:text-[#0B132B] transition-all border border-gray-100" data-category="Volquetes">Volquetes</button>
-          <button class="filter-btn bg-white text-gray-400 px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#F2B705] hover:text-[#0B132B] transition-all border border-gray-100" data-category="Mineria">Minería</button>
-        </div>
-
-        <select id="price-filter" class="bg-white border-none rounded-xl px-6 py-4 font-bold text-[#0B132B] text-xs shadow-sm ring-1 ring-gray-100 outline-none w-full md:w-64 cursor-pointer">
-          <option value="all">Todos los precios</option>
-          <option value="20000">Menos de $20,000</option>
-          <option value="40000">Menos de $40,000</option>
-          <option value="60000">Menos de $60,000</option>
-          <option value="80000">Menos de $80,000</option>
-          <option value="99999999">Más de $80,000</option>
-        </select>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 auto-rows-fr" id="vehicles-grid">
-        {vehiculos?.map((item) => (
-          <div class="vehiculo-card bg-white overflow-hidden border border-gray-50 shadow-sm transition-all duration-500 flex flex-col h-full" 
-               style="border-radius: 28px;"
-               data-category={item.categoria} 
-               data-price={item.precio || 0}>
-            
-            <div class="relative aspect-[4/3] overflow-hidden shrink-0">
-              <img src={item.imagen_url} alt={item.nombre} class="w-full h-full object-cover" loading="lazy" />
-              <div class="absolute top-4 left-4 bg-[#F2B705] text-[#0B132B] text-[9px] font-black px-3 py-1 rounded-full uppercase">
-                {item.categoria}
-              </div>
-            </div>
-
-            <div class="p-10 text-center flex flex-col flex-1">
-              <h3 class="text-2xl font-black text-[#0B132B] mb-2 uppercase italic tracking-tighter leading-tight min-h-[3.5rem] flex items-center justify-center">
-                {item.nombre}
-              </h3>
-              
-              <p class="text-[#F2B705] font-black text-xl mb-8 italic">
-                {item.precio ? `$${item.precio.toLocaleString()} USD` : 'CONSULTAR'}
-              </p>
-
-              <div class="mt-auto">
-                <a href={`https://wa.me/51968348172?text=Deseo información sobre: ${item.nombre}`} 
-                   class="bg-[#0B132B] text-white block w-full py-5 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-[#F2B705] hover:text-[#0B132B] transition-all">
-                  Cotizar por WhatsApp
-                </a>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-  </div>
+  </main>
 </Layout>
-
-<script is:inline>
-  document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.filter-btn');
-    const priceSelect = document.getElementById('price-filter');
-    const cards = document.querySelectorAll('.vehiculo-card');
-
-    function filterVehicles() {
-      const activeButton = document.querySelector('.filter-btn.active');
-      const activeCategory = activeButton ? activeButton.getAttribute('data-category') : 'Todos';
-      const maxPrice = priceSelect.value === 'all' ? Infinity : parseFloat(priceSelect.value);
-
-      cards.forEach(card => {
-        const category = card.getAttribute('data-category');
-        const price = parseFloat(card.getAttribute('data-price')) || 0;
-
-        const categoryMatch = activeCategory === 'Todos' || category === activeCategory;
-        const priceMatch = price <= maxPrice;
-
-        if (categoryMatch && priceMatch) {
-          card.style.display = 'flex'; // Mantener flex para la estructura
-          setTimeout(() => { card.style.opacity = '1'; }, 10);
-        } else {
-          card.style.opacity = '0';
-          setTimeout(() => { card.style.display = 'none'; }, 300);
-        }
-      });
-    }
-
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        buttons.forEach(b => {
-          b.classList.remove('active', 'bg-[#0B132B]', 'text-white');
-          b.classList.add('bg-white', 'text-gray-400');
-        });
-        btn.classList.add('active', 'bg-[#0B132B]', 'text-white');
-        btn.classList.remove('bg-white', 'text-gray-400');
-        filterVehicles();
-      });
-    });
-
-    priceSelect.addEventListener('change', filterVehicles);
-  });
-</script>

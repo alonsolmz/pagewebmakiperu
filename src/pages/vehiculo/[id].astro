@@ -1,18 +1,17 @@
 ---
+export const prerender = false;
+
 import Layout from '../../layouts/Layout.astro';
 import { supabase } from '../../lib/supabase';
 import { Image } from 'astro:assets';
 
-
 const { id } = Astro.params;
-
 
 const { data: vehiculo, error } = await supabase
   .from('vehiculos')
   .select('*')
   .eq('id', id)
   .single();
-
 
 if (error || !vehiculo) {
   return Astro.redirect('/');
