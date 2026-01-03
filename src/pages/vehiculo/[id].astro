@@ -7,14 +7,20 @@ import { Image } from 'astro:assets';
 
 const { id } = Astro.params;
 
+// Intento de obtener datos de Supabase
 const { data: vehiculo, error } = await supabase
   .from('vehiculos')
   .select('*')
   .eq('id', id)
   .single();
 
-if (error || !vehiculo) {
-  return Astro.redirect('/');
+// Manejo de errores para evitar bucles de redirección
+if (error) {
+  return new Response(`Error de conexión con Supabase: ${error.message}. Verifica las Variables de Entorno en Vercel.`, { status: 500 });
+}
+
+if (!vehiculo) {
+  return new Response(`El vehículo con ID "${id}" no existe en la base de datos.`, { status: 404 });
 }
 
 const telefonoEmpresa = "51968348172";
@@ -71,7 +77,7 @@ const urlWhatsapp = `https://wa.me/${telefonoEmpresa}?text=${encodeURIComponent(
         <div class="space-y-6">
           <h3 class="text-lg md:text-xl font-bold text-slate-800 border-b pb-2">Especificaciones Técnicas</h3>
           <div class="grid grid-cols-1 gap-3 md:gap-4">
-            {vehiculo.especificaciones?.split('\n').map((item: string) => (
+            {vehiculo.especificaciones && vehiculo.especificaciones.split('\n').map((item: string) => (
               item.trim() !== "" && (
                 <div class="flex items-center gap-3 bg-gray-50 p-4 rounded-xl border border-gray-100 transition-hover hover:bg-white hover:shadow-sm">
                   <div class="w-2 h-2 bg-yellow-500 rounded-full flex-shrink-0"></div>
