@@ -1,16 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --azul-principal: #0B132B;
   --amarillo-acento: #F2B705;
 }
 
-* {
+body {
+  background-color: #F5F6F8;
+  font-family: 'Inter', sans-serif;
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 
-img {
-  max-width: 100%;
-  display: block;
+/* El estilo de tus tarjetas de GitHub */
+.vehiculo-card {
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.vehiculo-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(11, 19, 43, 0.12);
 }

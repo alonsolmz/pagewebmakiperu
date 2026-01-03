@@ -1,223 +1,113 @@
 ---
-export const prerender = false;
 import Layout from '../layouts/Layout.astro';
 import { supabase } from '../lib/supabase';
+import '../styles/global.css';
 import { Image } from 'astro:assets';
+// Asegúrate de que esta imagen exista en src/assets/
+import heroImg from '../assets/maquinariaimagen.png'; 
 
 const { data: vehiculos, error } = await supabase
   .from('vehiculos')
   .select('*')
+  .eq('visible', true)
   .order('created_at', { ascending: false });
 
-const listaVehiculos = vehiculos || [];
+if (error) console.error(error);
 ---
 
-<Layout title="MaquiPeru - Catálogo de Maquinaria">
-  <main class="page-container">
-    <section class="hero-section">
-      <div class="hero-content">
-        <span class="top-label">Maquinaria Pesada</span>
-        <h1>EQUIPOS DE ALTO RENDIMIENTO</h1>
-        <p>Soluciones confiables para minería, construcción y agricultura en todo el Perú.</p>
+<Layout title="MaquiPeru | Maquinaria Pesada">
+  <div class="bg-[#F5F6F8] min-h-screen py-10 md:py-16 px-8 md:px-24 lg:px-40">
+
+    <header class="bg-[#0B132B] w-full py-6 px-10 shadow-xl mb-12" style="border-radius: 24px;">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <a href="/" class="text-3xl font-black text-white tracking-tighter">
+          MAQUI<span class="text-[#F2B705]">PERU</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-12">
+          <a href="/" class="text-[11px] font-black text-white/90 hover:text-[#F2B705] transition-colors uppercase tracking-[0.25em]">Inicio</a>
+          <a href="#nosotros" class="text-[11px] font-black text-white/90 hover:text-[#F2B705] transition-colors uppercase tracking-[0.25em]">Nosotros</a>
+          <a href="#grid-vehiculos" class="text-[11px] font-black text-white/90 hover:text-[#F2B705] transition-colors uppercase tracking-[0.25em]">Catálogo</a>
+        </nav>
+
+        <a href="https://wa.me/51968348172" 
+           class="bg-[#F2B705] text-[#0B132B] px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-[0.25em] hover:scale-105 transition-all shadow-lg">
+          CONTACTAR
+        </a>
+      </div>
+    </header>
+
+    <div class="relative overflow-hidden shadow-2xl bg-[#0B132B]" style="border-radius: 32px;">
+      <section class="relative h-[450px] md:h-[550px]">
+        <Image src={heroImg} alt="MaquiPeru" class="absolute inset-0 w-full h-full object-cover opacity-50" />
+        <div class="absolute inset-0 bg-gradient-to-r from-[#0B132B] via-transparent flex items-center px-10 md:px-20">
+          <div class="max-w-2xl">
+            <h1 class="text-6xl md:text-8xl font-black text-white italic tracking-tighter leading-[0.85] uppercase">
+              POTENCIA Y <br/> <span class="text-[#F2B705]">MOVIMIENTO</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-white/80 font-light italic border-l-4 border-[#F2B705] pl-6 mt-6">
+              Soluciones de ingeniería para los proyectos más exigentes.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="h-20 md:h-28"></div>
+
+    <section id="nosotros" class="bg-white py-24 px-10 rounded-[32px] shadow-sm border border-gray-100">
+      <div class="max-w-5xl mx-auto text-center">
+        <h2 class="text-2xl font-black text-[#0B132B] mb-8 uppercase tracking-[0.5em] flex flex-col items-center">
+          NOSOTROS
+          <div class="w-24 h-1 bg-[#F2B705] mt-4"></div>
+        </h2>
+        <div class="text-[#4A4F5A] text-xl italic font-medium leading-relaxed space-y-6">
+          <p>
+            En <strong class="text-[#0B132B]">MaquiPeru</strong>, no solo vendemos maquinaria; seleccionamos cada unidad para garantizar potencia y durabilidad.
+          </p>
+        </div>
       </div>
     </section>
 
-    <div class="grid-container" id="grid-vehiculos">
-      <div class="section-header">
-        <h2>Nuestro Catálogo</h2>
-        <div class="line"></div>
+    <div class="h-20 md:h-28"></div>
+
+    <section id="grid-vehiculos" class="space-y-12">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="flex gap-3 overflow-x-auto w-full md:w-auto pb-2 no-scrollbar">
+          <button class="filter-btn active bg-[#0B132B] text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all" data-category="Todos">Todos</button>
+          <button class="filter-btn bg-white text-gray-400 px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#F2B705] hover:text-[#0B132B] transition-all border border-gray-100" data-category="Linea Amarilla">Línea Amarilla</button>
+        </div>
       </div>
 
-      <div class="grid">
-        {listaVehiculos.map((v) => (
-          <a href={`/vehiculo/${v.id}`} class="card">
-            <div class="card-image">
-              <Image src={v.imagen_url} alt={v.nombre} width={500} height={350} />
-              <div class="card-badge">{v.categoria}</div>
-            </div>
-            <div class="card-info">
-              <h3 class="card-title">{v.nombre}</h3>
-              <div class="card-footer">
-                <div class="price-box">
-                  <span class="price-label">Precio de venta</span>
-                  <span class="price-value">{v.precio ? `$${Number(v.precio).toLocaleString()}` : "Consultar"}</span>
-                </div>
-                <div class="arrow-icon">→</div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 auto-rows-fr">
+        {vehiculos?.map((item) => (
+          <div class="vehiculo-card bg-white overflow-hidden border border-gray-50 shadow-sm transition-all duration-500 flex flex-col h-full" 
+               style="border-radius: 28px;"
+               data-category={item.categoria} 
+               data-price={item.precio || 0}>
+            
+            <a href={`/vehiculo/${item.id}`} class="block relative aspect-[4/3] overflow-hidden shrink-0">
+              <img src={item.imagen_url} alt={item.nombre} class="w-full h-full object-cover" />
+              <div class="absolute top-4 left-4 bg-[#F2B705] text-[#0B132B] text-[9px] font-black px-3 py-1 rounded-full uppercase">
+                {item.categoria}
               </div>
+            </a>
+
+            <div class="p-10 text-center flex flex-col flex-1">
+              <h3 class="text-2xl font-black text-[#0B132B] mb-2 uppercase italic tracking-tighter leading-tight">
+                {item.nombre}
+              </h3>
+              <p class="text-[#F2B705] font-black text-xl mb-8 italic">
+                {item.precio ? `$${item.precio.toLocaleString()} USD` : 'CONSULTAR'}
+              </p>
+              <a href={`https://wa.me/51968348172?text=Información sobre: ${item.nombre}`} 
+                 class="mt-auto bg-[#0B132B] text-white block w-full py-5 rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-[#F2B705] hover:text-[#0B132B] transition-all">
+                Cotizar por WhatsApp
+              </a>
             </div>
-          </a>
+          </div>
         ))}
       </div>
-    </div>
-  </main>
+    </section>
+  </div>
 </Layout>
-
-<style>
-  .page-container {
-    padding-bottom: 100px;
-  }
-
-  .hero-section {
-    background: #0B132B;
-    color: white;
-    padding: 100px 24px;
-    text-align: center;
-  }
-
-  .hero-content {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .top-label {
-    color: #F2B705;
-    text-transform: uppercase;
-    font-weight: 900;
-    font-size: 12px;
-    letter-spacing: 3px;
-    display: block;
-    margin-bottom: 16px;
-  }
-
-  .hero-section h1 {
-    font-size: clamp(2.5rem, 8vw, 4.5rem);
-    font-weight: 900;
-    margin: 0;
-    letter-spacing: -3px;
-    line-height: 1;
-  }
-
-  .hero-section p {
-    color: #94a3b8;
-    font-size: 1.1rem;
-    margin-top: 24px;
-  }
-
-  .grid-container {
-    max-width: 1400px;
-    margin: -60px auto 0;
-    padding: 0 24px;
-  }
-
-  .section-header {
-    margin-bottom: 40px;
-  }
-
-  .section-header h2 {
-    font-size: 24px;
-    font-weight: 900;
-    margin-bottom: 8px;
-  }
-
-  .line {
-    width: 60px;
-    height: 4px;
-    background: #F2B705;
-    border-radius: 2px;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 32px;
-  }
-
-  .card {
-    text-decoration: none;
-    color: inherit;
-    background: white;
-    border-radius: 32px;
-    overflow: hidden;
-    border: 1px solid #f1f5f9;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  }
-
-  .card:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 30px 60px -12px rgba(11, 19, 43, 0.15);
-  }
-
-  .card-image {
-    height: 240px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-  }
-
-  .card:hover .card-image img {
-    transform: scale(1.1);
-  }
-
-  .card-badge {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background: rgba(11, 19, 43, 0.8);
-    backdrop-filter: blur(8px);
-    color: white;
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 10px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .card-info {
-    padding: 32px;
-  }
-
-  .card-title {
-    font-size: 20px;
-    font-weight: 800;
-    margin: 0 0 24px 0;
-    line-height: 1.2;
-  }
-
-  .card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    border-top: 1px solid #f1f5f9;
-    padding-top: 20px;
-  }
-
-  .price-label {
-    display: block;
-    font-size: 10px;
-    color: #94a3b8;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-
-  .price-value {
-    font-size: 24px;
-    font-weight: 900;
-    color: #0B132B;
-  }
-
-  .arrow-icon {
-    width: 40px;
-    height: 40px;
-    background: #f1f5f9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    font-weight: bold;
-    transition: all 0.3s;
-  }
-
-  .card:hover .arrow-icon {
-    background: #F2B705;
-    color: #0B132B;
-    transform: translateX(5px);
-  }
-</style>
