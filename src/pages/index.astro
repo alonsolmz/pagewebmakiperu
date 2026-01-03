@@ -12,103 +12,212 @@ const { data: vehiculos, error } = await supabase
 const listaVehiculos = vehiculos || [];
 ---
 
-<Layout title="MaquiPeru - Catálogo">
-  <main class="container">
-    <header class="hero">
-      <h1>MAQUIPERU</h1>
-      <p>Catálogo de Maquinaria Pesada</p>
-    </header>
+<Layout title="MaquiPeru - Catálogo de Maquinaria">
+  <main class="page-container">
+    <section class="hero-section">
+      <div class="hero-content">
+        <span class="top-label">Maquinaria Pesada</span>
+        <h1>EQUIPOS DE ALTO RENDIMIENTO</h1>
+        <p>Soluciones confiables para minería, construcción y agricultura en todo el Perú.</p>
+      </div>
+    </section>
 
-    <div class="grid">
-      {listaVehiculos.map((v) => (
-        <a href={`/vehiculo/${v.id}`} class="card">
-          <div class="image-container">
-            <Image src={v.imagen_url} alt={v.nombre} width={400} height={250} />
-            <span class="badge">{v.categoria}</span>
-          </div>
-          <div class="content">
-            <h2 class="title">{v.nombre}</h2>
-            <p class="price">{v.precio ? `$${Number(v.precio).toLocaleString()}` : "Consultar"}</p>
-          </div>
-        </a>
-      ))}
+    <div class="grid-container" id="grid-vehiculos">
+      <div class="section-header">
+        <h2>Nuestro Catálogo</h2>
+        <div class="line"></div>
+      </div>
+
+      <div class="grid">
+        {listaVehiculos.map((v) => (
+          <a href={`/vehiculo/${v.id}`} class="card">
+            <div class="card-image">
+              <Image src={v.imagen_url} alt={v.nombre} width={500} height={350} />
+              <div class="card-badge">{v.categoria}</div>
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{v.nombre}</h3>
+              <div class="card-footer">
+                <div class="price-box">
+                  <span class="price-label">Precio de venta</span>
+                  <span class="price-value">{v.precio ? `$${Number(v.precio).toLocaleString()}` : "Consultar"}</span>
+                </div>
+                <div class="arrow-icon">→</div>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
     </div>
   </main>
 </Layout>
 
 <style>
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    font-family: 'Inter', system-ui, sans-serif;
+  .page-container {
+    padding-bottom: 100px;
   }
-  .hero {
+
+  .hero-section {
+    background: #0B132B;
+    color: white;
+    padding: 100px 24px;
     text-align: center;
-    margin-bottom: 60px;
   }
-  .hero h1 {
-    font-size: 4rem;
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .top-label {
+    color: #F2B705;
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 12px;
+    letter-spacing: 3px;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .hero-section h1 {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
     font-weight: 900;
     margin: 0;
-    letter-spacing: -2px;
+    letter-spacing: -3px;
+    line-height: 1;
   }
-  .hero p {
-    color: #64748b;
-    font-size: 1.2rem;
+
+  .hero-section p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    margin-top: 24px;
   }
+
+  .grid-container {
+    max-width: 1400px;
+    margin: -60px auto 0;
+    padding: 0 24px;
+  }
+
+  .section-header {
+    margin-bottom: 40px;
+  }
+
+  .section-header h2 {
+    font-size: 24px;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+
+  .line {
+    width: 60px;
+    height: 4px;
+    background: #F2B705;
+    border-radius: 2px;
+  }
+
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 30px;
+    gap: 32px;
   }
+
   .card {
     text-decoration: none;
     color: inherit;
     background: white;
-    border-radius: 24px;
+    border-radius: 32px;
     overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid #f1f5f9;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   }
+
   .card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    transform: translateY(-12px);
+    box-shadow: 0 30px 60px -12px rgba(11, 19, 43, 0.15);
   }
-  .image-container {
+
+  .card-image {
+    height: 240px;
     position: relative;
-    height: 220px;
+    overflow: hidden;
   }
-  .image-container img {
+
+  .card-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.6s ease;
   }
-  .badge {
+
+  .card:hover .card-image img {
+    transform: scale(1.1);
+  }
+
+  .card-badge {
     position: absolute;
-    top: 15px;
-    left: 15px;
-    background: rgba(15, 23, 42, 0.9);
+    top: 20px;
+    left: 20px;
+    background: rgba(11, 19, 43, 0.8);
+    backdrop-filter: blur(8px);
     color: white;
-    padding: 4px 12px;
-    border-radius: 99px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-  .content {
-    padding: 24px;
-  }
-  .title {
-    margin: 0 0 10px 0;
-    font-size: 1.25rem;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 10px;
     font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
-  .price {
-    font-size: 1.5rem;
+
+  .card-info {
+    padding: 32px;
+  }
+
+  .card-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 24px 0;
+    line-height: 1.2;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 20px;
+  }
+
+  .price-label {
+    display: block;
+    font-size: 10px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .price-value {
+    font-size: 24px;
     font-weight: 900;
-    color: #0f172a;
-    margin: 0;
+    color: #0B132B;
+  }
+
+  .arrow-icon {
+    width: 40px;
+    height: 40px;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+    transition: all 0.3s;
+  }
+
+  .card:hover .arrow-icon {
+    background: #F2B705;
+    color: #0B132B;
+    transform: translateX(5px);
   }
 </style>
