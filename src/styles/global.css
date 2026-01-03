@@ -17,9 +17,9 @@ body {
   margin: 0;
 }
 
-/* Evita que el header tape el inicio de la sección al scrollear */
+/* Margen para que el scroll no tape los títulos */
 section[id] {
-  scroll-margin-top: 80px;
+  scroll-margin-top: 100px;
 }
 
 .vehiculo-card {
@@ -31,7 +31,6 @@ section[id] {
   box-shadow: 0 20px 40px rgba(11, 19, 43, 0.12);
 }
 
-/* Ocultar barra de scroll para filtros */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

@@ -20,73 +20,66 @@ if (error) console.error(error);
     
     <div class="px-4 md:px-10 py-6 md:py-10">
       <div class="relative overflow-hidden shadow-2xl bg-[#0B132B] rounded-[40px] h-[500px] md:h-[650px]">
-        <Image 
-          src={heroImg} 
-          alt="MaquiPeru Maquinaria" 
-          class="absolute inset-0 w-full h-full object-cover opacity-60"
-        />
-        <div class="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-transparent md:bg-gradient-to-r flex items-center px-6 md:px-20">
+        <Image src={heroImg} alt="MaquiPeru" class="absolute inset-0 w-full h-full object-cover opacity-60" />
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-transparent flex items-center px-6 md:px-20">
           <div class="max-w-3xl">
             <h1 class="text-5xl md:text-8xl font-black text-white italic tracking-tighter leading-[0.9] uppercase">
               POTENCIA Y <br/> <span class="text-[#F2B705]">MOVIMIENTO</span>
             </h1>
-            <p class="text-lg md:text-2xl text-white/90 font-light italic border-l-4 border-[#F2B705] pl-6 mt-8 max-w-xl">
-              Soluciones de ingeniería para los proyectos más exigentes del sector industrial y minero.
+            <p class="text-lg md:text-2xl text-white/90 font-light italic border-l-4 border-[#F2B705] pl-6 mt-8">
+              Líderes en suministro de maquinaria para minería y construcción civil.
             </p>
           </div>
         </div>
       </div>
     </div>
 
-    <section id="nosotros" class="py-20 px-6">
-      <div class="max-w-4xl mx-auto bg-white p-10 md:p-16 rounded-[40px] shadow-sm border border-gray-100 text-center">
-        <h2 class="text-xl font-black text-[#0B132B] mb-8 uppercase tracking-[0.4em]">
-          NOSOTROS
-          <div class="w-16 h-1 bg-[#F2B705] mx-auto mt-4"></div>
-        </h2>
-        <div class="text-slate-600 text-lg md:text-xl italic font-medium leading-relaxed space-y-6">
-          <p>
-            En <strong class="text-[#0B132B]">MaquiPeru</strong>, construimos los cimientos del progreso industrial. Seleccionamos rigurosamente cada unidad para garantizar potencia y durabilidad.
-          </p>
+    <section id="nosotros" class="py-24 px-6">
+      <div class="max-w-5xl mx-auto bg-white p-10 md:p-20 rounded-[50px] shadow-sm border border-gray-100">
+        <div class="grid md:grid-cols-3 gap-12 items-center">
+          <div class="md:col-span-1">
+             <h2 class="text-3xl font-black text-[#0B132B] uppercase tracking-tighter leading-none">
+              MÁS QUE <br/><span class="text-[#F2B705]">MÁQUINAS</span>
+            </h2>
+            <div class="w-12 h-2 bg-[#F2B705] mt-4"></div>
+          </div>
+          <div class="md:col-span-2 text-slate-600 text-lg leading-relaxed space-y-6">
+            <p class="font-bold text-[#0B132B]">
+              En MaquiPeru, entendemos que cada proyecto es un compromiso con el desarrollo del país. 
+            </p>
+            <p>
+              Nuestra trayectoria se basa en la selección rigurosa de equipos de alto rendimiento. No solo vendemos maquinaria; entregamos herramientas de confianza que garantizan la continuidad operativa en los terrenos más exigentes del sector industrial y minero.
+            </p>
+            <p>
+              Contamos con un soporte técnico especializado y una flota renovada que cumple con los más altos estándares de seguridad y eficiencia energética, asegurando que su inversión se traduzca en resultados medibles.
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="grid-vehiculos" class="px-6 md:px-20 pb-20 space-y-12">
+    <section id="grid-vehiculos" class="px-6 md:px-20 pb-24 space-y-12">
       <div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-7xl mx-auto">
-        <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 no-scrollbar" id="category-filters">
-          <button class="filter-btn active bg-[#0B132B] text-white px-6 py-3 rounded-xl font-black text-[9px] uppercase tracking-widest transition-all" data-category="Todos">Todos</button>
-          <button class="filter-btn bg-white text-slate-400 px-6 py-3 rounded-xl font-black text-[9px] uppercase tracking-widest border border-gray-100 hover:bg-[#F2B705] hover:text-[#0B132B] transition-all" data-category="Linea Amarilla">Línea Amarilla</button>
-          <button class="filter-btn bg-white text-slate-400 px-6 py-3 rounded-xl font-black text-[9px] uppercase tracking-widest border border-gray-100 hover:bg-[#F2B705] hover:text-[#0B132B] transition-all" data-category="Volquetes">Volquetes</button>
-          <button class="filter-btn bg-white text-slate-400 px-6 py-3 rounded-xl font-black text-[9px] uppercase tracking-widest border border-gray-100 hover:bg-[#F2B705] hover:text-[#0B132B] transition-all" data-category="Mineria">Minería</button>
+        <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 no-scrollbar">
+          <button class="filter-btn active bg-[#0B132B] text-white px-6 py-3 rounded-xl font-black text-[9px] uppercase tracking-widest">Todos</button>
+          <button class="filter-btn bg-white text-slate-400 px-6 py-3 rounded-xl font-black text-[9px] uppercase tracking-widest border border-gray-100" data-category="Linea Amarilla">Línea Amarilla</button>
+          <button class="filter-btn bg-white text-slate-400 px-6 py-3 rounded-xl font-black text-[9px] uppercase tracking-widest border border-gray-100" data-category="Volquetes">Volquetes</button>
+          <button class="filter-btn bg-white text-slate-400 px-6 py-3 rounded-xl font-black text-[9px] uppercase tracking-widest border border-gray-100" data-category="Mineria">Minería</button>
         </div>
-
-        <select id="price-filter" class="bg-white border-none rounded-xl px-6 py-4 font-bold text-[#0B132B] text-xs shadow-sm ring-1 ring-gray-100 outline-none w-full md:w-64 cursor-pointer">
-          <option value="all">Todos los precios</option>
-          <option value="20000">Hasta $20,000</option>
-          <option value="40000">Hasta $40,000</option>
-          <option value="60000">Hasta $60,000</option>
-          <option value="80000">Hasta $80,000</option>
-          <option value="99999999">Más de $80,000</option>
-        </select>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto" id="vehicles-grid">
         {vehiculos?.map((item) => (
-          <div class="vehiculo-card bg-white overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 flex flex-col h-full group" 
-               style="border-radius: 32px;"
-               data-category={item.categoria} 
-               data-price={item.precio || 0}>
-
+          <div class="vehiculo-card bg-white overflow-hidden shadow-md transition-all flex flex-col h-full" 
+               style="border-radius: 32px;" data-category={item.categoria} data-price={item.precio || 0}>
             <div class="relative aspect-[4/3] overflow-hidden">
-              <img src={item.imagen_url} alt={item.nombre} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" />
+              <img src={item.imagen_url} alt={item.nombre} class="w-full h-full object-cover" loading="lazy" />
               <div class="absolute top-4 right-4 bg-[#0B132B] text-white text-[8px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest">
                 {item.categoria}
               </div>
             </div>
-
             <div class="p-8 text-center flex flex-col flex-1">
-              <h3 class="text-xl font-black text-[#0B132B] mb-2 uppercase italic tracking-tighter leading-tight min-h-[3rem] flex items-center justify-center">
+              <h3 class="text-xl font-black text-[#0B132B] mb-2 uppercase italic tracking-tighter">
                 {item.nombre}
               </h3>
               <p class="text-[#F2B705] font-black text-2xl mb-8">
@@ -95,7 +88,7 @@ if (error) console.error(error);
               <div class="mt-auto">
                 <a href={`https://wa.me/51968348172?text=Deseo información sobre: ${item.nombre}`} 
                    target="_blank"
-                   class="bg-[#0B132B] text-white block w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#F2B705] hover:text-[#0B132B] transition-all shadow-lg">
+                   class="bg-[#0B132B] text-white block w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#F2B705] hover:text-[#0B132B] transition-all">
                   Cotizar WhatsApp
                 </a>
               </div>
@@ -110,42 +103,28 @@ if (error) console.error(error);
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('.filter-btn');
-    const priceSelect = document.getElementById('price-filter');
     const cards = document.querySelectorAll('.vehiculo-card');
-
-    function filterVehicles() {
-      const activeButton = document.querySelector('.filter-btn.active');
-      const activeCategory = activeButton ? activeButton.getAttribute('data-category') : 'Todos';
-      const maxPrice = priceSelect.value === 'all' ? Infinity : parseFloat(priceSelect.value);
-
-      cards.forEach(card => {
-        const category = card.getAttribute('data-category');
-        const price = parseFloat(card.getAttribute('data-price')) || 0;
-        const categoryMatch = activeCategory === 'Todos' || category === activeCategory;
-        const priceMatch = price <= maxPrice;
-
-        if (categoryMatch && priceMatch) {
-          card.style.display = 'flex';
-          setTimeout(() => { card.style.opacity = '1'; }, 10);
-        } else {
-          card.style.opacity = '0';
-          setTimeout(() => { card.style.display = 'none'; }, 300);
-        }
-      });
-    }
 
     buttons.forEach(btn => {
       btn.addEventListener('click', () => {
+        const category = btn.getAttribute('data-category') || 'Todos';
+        
         buttons.forEach(b => {
           b.classList.remove('active', 'bg-[#0B132B]', 'text-white');
           b.classList.add('bg-white', 'text-slate-400');
         });
         btn.classList.add('active', 'bg-[#0B132B]', 'text-white');
         btn.classList.remove('bg-white', 'text-slate-400');
-        filterVehicles();
+
+        cards.forEach(card => {
+          const cardCat = card.getAttribute('data-category');
+          if (category === 'Todos' || cardCat === category) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
       });
     });
-
-    priceSelect.addEventListener('change', filterVehicles);
   });
 </script>
