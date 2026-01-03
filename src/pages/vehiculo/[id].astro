@@ -1,0 +1,101 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { supabase } from '../../lib/supabase';
+import { Image } from 'astro:assets';
+
+// 1. Obtenemos el ID de la URL
+const { id } = Astro.params;
+
+// 2. Traemos la información específica de Supabase
+const { data: vehiculo, error } = await supabase
+  .from('vehiculos')
+  .select('*')
+  .eq('id', id)
+  .single();
+
+// 3. Si el ID no existe o hay error, regresamos al inicio
+if (error || !vehiculo) {
+  return Astro.redirect('/');
+}
+
+const telefonoEmpresa = "51968348172";
+const mensajeWa = `Hola MaquiPeru, solicito información técnica detallada de: ${vehiculo.nombre}`;
+const urlWhatsapp = `https://wa.me/${telefonoEmpresa}?text=${encodeURIComponent(mensajeWa)}`;
+---
+
+<Layout title={`${vehiculo.nombre} - MaquiPeru`}>
+  <main class="bg-white min-h-screen">
+    <nav class="max-w-7xl mx-auto px-4 md:px-6 py-4">
+      <a href="/" class="text-xs md:text-sm font-bold text-slate-500 hover:text-yellow-600 transition-colors flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        VOLVER AL CATÁLOGO
+      </a>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 py-4 md:py-8">
+      
+      <section>
+        <div class="lg:sticky lg:top-28">
+          <Image 
+            src={vehiculo.imagen_url} 
+            alt={vehiculo.nombre} 
+            width={800}
+            height={600}
+            format="webp"
+            class="w-full aspect-video lg:aspect-[4/3] object-cover rounded-2xl md:rounded-3xl shadow-2xl border border-gray-100"
+          />
+        </div>
+      </section>
+
+      <section class="flex flex-col">
+        <div class="mb-6">
+          <span class="inline-block bg-yellow-100 text-yellow-800 text-[10px] md:text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">
+            {vehiculo.categoria}
+          </span>
+          <h1 class="text-3xl md:text-5xl font-black text-slate-900 mt-4 leading-tight">
+            {vehiculo.nombre}
+          </h1>
+        </div>
+
+        <div class="bg-slate-900 text-white p-6 md:p-8 rounded-2xl md:rounded-3xl mb-8 flex justify-between items-center shadow-xl shadow-slate-200">
+          <div>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Precio de Venta</p>
+            <p class="text-3xl md:text-4xl font-black">
+              {vehiculo.precio ? `$${Number(vehiculo.precio).toLocaleString()}` : "Consultar"}
+            </p>
+          </div>
+          <div class="hidden sm:block opacity-20">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <h3 class="text-lg md:text-xl font-bold text-slate-800 border-b pb-2">Especificaciones Técnicas</h3>
+          <div class="grid grid-cols-1 gap-3 md:gap-4">
+            {vehiculo.especificaciones?.split('\n').map((item) => (
+              item.trim() !== "" && (
+                <div class="flex items-center gap-3 bg-gray-50 p-4 rounded-xl border border-gray-100 transition-hover hover:bg-white hover:shadow-sm">
+                  <div class="w-2 h-2 bg-yellow-500 rounded-full flex-shrink-0"></div>
+                  <span class="text-slate-700 font-medium text-sm md:text-base">{item}</span>
+                </div>
+              )
+            ))}
+          </div>
+        </div>
+
+        <div class="mt-10 md:mt-12 space-y-4">
+          <a 
+            href={urlWhatsapp}
+            target="_blank"
+            class="flex items-center justify-center gap-3 w-full bg-[#25D366] text-white py-4 md:py-5 rounded-2xl font-black text-lg md:text-xl hover:bg-green-600 hover:scale-[1.01] transition-all shadow-lg shadow-green-100"
+          >
+            SOLICITAR COTIZACIÓN
+          </a>
+          <p class="text-center text-xs md:text-sm text-gray-400 font-medium">
+            Atención personalizada por asesores de MaquiPeru.
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+</Layout>

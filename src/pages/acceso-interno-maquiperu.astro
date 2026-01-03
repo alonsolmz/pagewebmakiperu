@@ -1,0 +1,102 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+---
+
+<Layout title="Gestión MaquiPeru">
+  <main class="min-h-screen bg-slate-50 p-6 font-sans">
+    <div class="max-w-2xl mx-auto bg-white shadow-xl rounded-xl p-8 border border-slate-200">
+      <h1 class="text-2xl font-bold text-slate-800 mb-6 border-b pb-4">Panel de Inventario - MaquiPeru</h1>
+      
+      <form id="uploadForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700">Nombre del Vehículo</label>
+          <input type="text" id="nombre" class="w-full p-2 border rounded-md" placeholder="Ej: Excavadora CAT 320D" required />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700">Categoría</label>
+          <select id="categoria" class="w-full p-2 border rounded-md">
+            <option value="Linea Amarilla">Línea Amarilla</option>
+            <option value="Volquetes">Volquetes</option>
+            <option value="Mineria">Minería</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700">Precio (USD)</label>
+          <input type="number" id="precio" class="w-full p-2 border rounded-md" placeholder="Dejar vacío para 'Consultar'" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700">Especificaciones</label>
+          <textarea id="especificaciones" rows="3" class="w-full p-2 border rounded-md" placeholder="Motor, HP, Horas de uso..."></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700">Foto del Vehículo</label>
+          <input type="file" id="foto" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-yellow-50 file:text-yellow-700" required />
+        </div>
+
+        <button type="submit" id="btnSubmit" class="w-full bg-slate-900 text-white font-bold py-3 rounded-md hover:bg-yellow-500 hover:text-slate-900 transition-all">
+          Publicar en la Web
+        </button>
+      </form>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { supabase } from '../lib/supabase';
+
+  const form = document.getElementById('uploadForm');
+  const btn = document.getElementById('btnSubmit');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.innerText = "Subiendo datos...";
+
+    const file = document.getElementById('foto').files[0];
+    const nombre = document.getElementById('nombre').value;
+    const categoria = document.getElementById('categoria').value;
+    const precio = document.getElementById('precio').value;
+    const especificaciones = document.getElementById('especificaciones').value;
+
+    try {
+      // 1. Subir imagen a Supabase Storage
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `vehiculos/${fileName}`;
+
+      const { data: storageData, error: storageError } = await supabase.storage
+        .from('fotos-maquinaria')
+        .upload(filePath, file);
+
+      if (storageError) throw storageError;
+
+      const { data: { publicUrl } } = supabase.storage.from('fotos-maquinaria').getPublicUrl(filePath);
+
+      // 2. Insertar datos en la tabla 'vehiculos'
+      const { error: dbError } = await supabase.from('vehiculos').insert([
+        { 
+          nombre, 
+          categoria, 
+          precio: precio ? parseFloat(precio) : null, 
+          especificaciones, 
+          imagen_url: publicUrl 
+        }
+      ]);
+
+      if (dbError) throw dbError;
+
+      alert("¡Vehículo publicado con éxito!");
+      form.reset();
+    } catch (err) {
+      alert("Hubo un problema: " + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Publicar en la Web";
+    }
+  });
+</script>
