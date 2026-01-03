@@ -7,17 +7,35 @@
   --amarillo-acento: #F2B705;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: #F5F6F8;
   font-family: 'Inter', sans-serif;
   margin: 0;
 }
 
-/* El estilo de tus tarjetas de GitHub */
+/* Evita que el header tape el inicio de la sección al scrollear */
+section[id] {
+  scroll-margin-top: 80px;
+}
+
 .vehiculo-card {
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
+
 .vehiculo-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px rgba(11, 19, 43, 0.12);
+}
+
+/* Ocultar barra de scroll para filtros */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
