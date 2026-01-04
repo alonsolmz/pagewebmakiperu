@@ -2,7 +2,7 @@
 
 MaquiPeru es una aplicación web moderna diseñada para la exhibición y gestión de maquinaria pesada. Combina una interfaz de usuario de alto impacto visual para clientes con un panel administrativo privado para el control de inventario en tiempo real.
 
-![Estado del Proyecto](https://img.shields.io/badge/Estado-En%20Desarrollo-yellow)
+![Estado del Proyecto](https://img.shields.io/badge/Estado-Terminado-green)
 ![Astro](https://img.shields.io/badge/Framework-Astro-ff5d01)
 ![Supabase](https://img.shields.io/badge/Database-Supabase-3ecf8e)
 ![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind--CSS-38bdf8)
