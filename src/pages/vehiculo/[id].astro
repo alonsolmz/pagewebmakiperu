@@ -3,14 +3,13 @@ import Layout from '@/layouts/Layout.astro';
 import { supabase } from '@/lib/supabase';
 import { Image } from 'astro:assets';
 
-// 1. Intentamos traer los datos sin forzar redirecciones
+
 const { data: vehiculos, error } = await supabase
   .from('vehiculos')
   .select('*')
   .order('created_at', { ascending: false });
 
-// 2. En lugar de Astro.redirect, manejamos el error visualmente
-// Esto rompe el bucle de redirecciones infinito (ERR_TOO_MANY_REDIRECTS)
+
 const hayError = !!error;
 const listaVehiculos = vehiculos || [];
 ---

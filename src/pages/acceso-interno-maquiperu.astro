@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { supabase } from '../lib/supabase';
 import '../styles/global.css';
 
-// 1. Cargamos los vehículos (se cargarán solo si hay sesión en el cliente)
+
 const { data: vehiculos, error } = await supabase
   .from('vehiculos')
   .select('*')
@@ -102,7 +102,6 @@ if (error) console.error("Error cargando inventario:", error);
   const adminPanel = document.getElementById('admin-panel');
   const loginForm = document.getElementById('login-form') as HTMLFormElement;
 
-  // 1. Verificar sesión
   const checkSession = async () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
@@ -115,7 +114,7 @@ if (error) console.error("Error cargando inventario:", error);
   };
   checkSession();
 
-  // 2. Login
+
   loginForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = (document.getElementById('email') as HTMLInputElement).value;
@@ -125,13 +124,13 @@ if (error) console.error("Error cargando inventario:", error);
     else location.reload();
   });
 
-  // 3. Logout
+
   document.getElementById('btnLogout')?.addEventListener('click', async () => {
     await supabase.auth.signOut();
     location.reload();
   });
 
-  // 4. Subida de Equipos
+ 
   const uploadForm = document.getElementById('uploadForm') as HTMLFormElement;
   uploadForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -162,7 +161,7 @@ if (error) console.error("Error cargando inventario:", error);
     }
   });
 
-  // 5. Cambiar Visibilidad
+ 
   document.addEventListener('click', async (e) => {
     const toggleBtn = (e.target as HTMLElement).closest('.btn-toggle-visible') as HTMLButtonElement;
     if (!toggleBtn) return;
