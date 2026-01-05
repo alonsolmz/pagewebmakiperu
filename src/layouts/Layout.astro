@@ -1,14 +1,12 @@
 ---
+// src/layouts/Layout.astro
+import Header from '../components/Header.astro';
+
 interface Props {
   title: string;
 }
 
 const { title } = Astro.props;
-const navItems = [
-  { name: 'Inicio', href: '/' },
-  { name: 'Nosotros', href: '#nosotros' },
-  { name: 'Catálogo', href: '/' },
-];
 ---
 
 <!doctype html>
@@ -17,122 +15,59 @@ const navItems = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <meta name="google-site-verification" content="O8dDiF-EDZIsYPFFBJJNiw5v313iwo9HSiGAPOJEPag" />
+
     <title>{title}</title>
+    
+    <meta name="description" content="MaquiPeru - Venta y soluciones de maquinaria pesada para minería y construcción civil en Perú." />
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
   </head>
   <body>
-    <header class="header">
-      <div class="header-container">
-        <a href="/" class="logo">
-          MAQUI<span>PERU</span>
-        </a>
+    
+    <Header />
 
-        <nav class="nav-desktop">
-          {navItems.map(item => (
-            <a href={item.href} class="nav-link">{item.name}</a>
-          ))}
-        </nav>
-
-        <div class="actions">
-          <a href="https://wa.me/51968348172" target="_blank" class="btn-contact">
-            CONTACTAR
-          </a>
-        </div>
-      </div>
-    </header>
-
-    <slot />
+    <main>
+      <slot />
+    </main>
 
     <style is:global>
+     
       :root {
-        --azul: #0B132B;
-        --amarillo: #F2B705;
+        --azul-principal: #0B132B;
+        --amarillo-acento: #F2B705;
         --gris-fondo: #F5F6F8;
-        --header-height: 80px;
       }
 
-      * { box-sizing: border-box; }
-
-      body {
+      * { 
+        box-sizing: border-box; 
         margin: 0;
         padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
         background-color: var(--gris-fondo);
         font-family: 'Inter', sans-serif;
-        color: var(--azul);
+        color: var(--azul-principal);
+        overflow-x: hidden;
+        line-height: 1.5;
       }
 
      
-      .header {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border-bottom: 1px solid #eee;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        height: var(--header-height);
-        display: flex;
-        align-items: center;
+      section[id] {
+        scroll-margin-top: 90px;
       }
 
-      .header-container {
-        max-width: 1400px;
-        width: 100%;
-        margin: 0 auto;
-        padding: 0 24px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .logo {
-        text-decoration: none;
-        font-size: 24px;
-        font-weight: 900;
-        color: var(--azul);
-        letter-spacing: -1px;
-      }
-
-      .logo span { color: var(--amarillo); }
-
-      .nav-desktop {
-        display: none; 
-        gap: 32px;
-      }
-
-      @media (min-width: 768px) {
-        .nav-desktop { display: flex; }
-      }
-
-      .nav-link {
-        text-decoration: none;
-        color: #64748b;
-        font-size: 12px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        transition: color 0.3s;
-      }
-
-      .nav-link:hover { color: var(--amarillo); }
-
-      .btn-contact {
-        background: var(--azul);
-        color: white;
-        text-decoration: none;
-        padding: 12px 24px;
-        border-radius: 50px;
-        font-size: 11px;
-        font-weight: 900;
-        letter-spacing: 1px;
-        transition: all 0.3s;
-        box-shadow: 0 10px 20px rgba(11, 19, 43, 0.1);
-      }
-
-      .btn-contact:hover {
-        background: var(--amarillo);
-        color: var(--azul);
-        transform: translateY(-2px);
+    
+      ::selection {
+        background-color: var(--amarillo-acento);
+        color: var(--azul-principal);
       }
     </style>
   </body>
