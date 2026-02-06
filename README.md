@@ -1,6 +1,6 @@
-# 🏗️ MaquiPeru - Catálogo de Maquinaria Pesada
+# 🏗️ MakiPeru - Catálogo de Maquinaria Pesada
 
-MaquiPeru es una aplicación web moderna diseñada para la exhibición y gestión de maquinaria pesada. Combina una interfaz de usuario de alto impacto visual para clientes con un panel administrativo privado para el control de inventario en tiempo real.
+MakiPeru es una aplicación web moderna diseñada para la exhibición y gestión de maquinaria pesada. Combina una interfaz de usuario de alto impacto visual para clientes con un panel administrativo privado para el control de inventario en tiempo real.
 
 ![Estado del Proyecto](https://img.shields.io/badge/Estado-Terminado-green)
 ![Astro](https://img.shields.io/badge/Framework-Astro-ff5d01)
